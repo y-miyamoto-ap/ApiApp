@@ -45,8 +45,21 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         })
     }
 
-    override fun onClickItem(url: String) {
-        WebViewActivity.start(this, url)
+    override fun onRestart() {
+        super.onRestart()
+        (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_API] as ApiFragment).updateView()
+        (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).updateData()
+    }
+
+    override fun onClickItem(shop: Shop) {
+        WebViewActivity.start(this, shop)
+    }
+
+    override fun onClickFavoriteItem(favoriteShop: FavoriteShop) {
+        val shop = ApiFragment.findBy(favoriteShop.id)
+        if(shop != null) {
+            WebViewActivity.start(this, shop)
+        }
     }
 
     /**

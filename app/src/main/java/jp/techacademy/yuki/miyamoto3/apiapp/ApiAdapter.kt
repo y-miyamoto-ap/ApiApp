@@ -1,5 +1,6 @@
 package jp.techacademy.yuki.miyamoto3.apiapp
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -20,7 +21,7 @@ class ApiAdapter : ListAdapter<Shop, ApiItemViewHolder>(ApiItemCallback()) {
     // 一覧画面から削除するときのコールバック（ApiFragmentへ通知するメソッド)
     var onClickDeleteFavorite: ((Shop) -> Unit)? = null
     // Itemを押したときのメソッド
-    var onClickItem: ((String) -> Unit)? = null
+    var onClickItem: ((Shop) -> Unit)? = null
 
     /**
      * ViewHolderを生成して返す
@@ -55,13 +56,15 @@ class ApiItemViewHolder(private val binding: RecyclerFavoriteBinding) :
                 )
             )
             setOnClickListener {
-                adapter.onClickItem?.invoke(if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc)
+                adapter.onClickItem?.invoke(shop)
             }
         }
         // nameTextViewのtextプロパティに代入されたオブジェクトのnameプロパティを代入
         binding.nameTextView.text = shop.name
-        // nameTextViewのtextプロパティに代入されたオブジェクトのnameプロパティを代入
+        // nameTextViewのtextプロパティに代入されたオブジェクトのaddressプロパティを代入
         binding.addressTextView.text = shop.address
+        binding.addressTextView.textSize=12f
+        binding.addressTextView.setTextColor(Color.DKGRAY)
 
         // Picassoライブラリを使い、imageViewにdata.logoImageのurlの画像を読み込ませる
         Picasso.get().load(shop.logoImage).into(binding.imageView)
