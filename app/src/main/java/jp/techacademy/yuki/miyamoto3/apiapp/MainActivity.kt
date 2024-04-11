@@ -56,10 +56,14 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
     }
 
     override fun onClickFavoriteItem(favoriteShop: FavoriteShop) {
-        val shop = ApiFragment.findBy(favoriteShop.id)
-        if(shop != null) {
-            WebViewActivity.start(this, shop)
-        }
+        val shop = Shop(
+            id = favoriteShop.id,
+            name = favoriteShop.name,
+            logoImage = favoriteShop.imageUrl,
+            couponUrls = CouponUrls(sp = favoriteShop.url, pc = ""),
+            address = ""
+        )
+        WebViewActivity.start(this, shop)
     }
 
     /**

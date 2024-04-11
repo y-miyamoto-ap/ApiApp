@@ -190,49 +190,5 @@ class ApiFragment : Fragment() {
     companion object {
         // 1回のAPIで取得する件数
         private const val COUNT = 20
-
-        /**
-         * Shopをidで検索して返す
-         * なければnullで返す
-         */
-        fun findBy(id: String): Shop? {
-            var shop: Shop? = null
-
-            val url = StringBuilder()
-                .append("https://webservice.recruit.co.jp/hotpepper/gourmet/v1/")
-                .append("?key=").append("d2c498ac017abb12") // ApiKey
-                .append("&id=").append(id)
-                .append("&count=").append(1)
-                .append("&format=json")
-                .toString()
-            val client = OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
-            val request = Request.Builder()
-                .url(url)
-                .build()
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) { // Error時の処理
-                    e.printStackTrace()
-                }
-
-                override fun onResponse(call: Call, response: Response) { // 成功時の処理
-                    // Jsonを変換するためのAdapterを用意
-                    val moshi = Moshi.Builder().build()
-                    val jsonAdapter = moshi.adapter(ApiResponse::class.java)
-
-                    response.body?.string()?.also {
-                        val apiResponse = jsonAdapter.fromJson(it)
-                        if (apiResponse != null) {
-                            shop = apiResponse.results.shop.first()
-                        }
-                    }
-                }
-            })
-
-            return shop
-        }
     }
 }
